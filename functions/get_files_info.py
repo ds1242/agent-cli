@@ -11,22 +11,23 @@ def get_files_info(working_directory, directory="."):
     if valid_target_dir == False:
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
 
-    if os.path.isdir(directory) == False:
-        return f'Error: {directory} is not a directory'
+    if os.path.isdir(target_dir) == False:
+        return f'Error: {target_dir} is not a directory'
 
 
-    directory_contents = os.listdir()
+    directory_contents = os.listdir(target_dir)
 
-    output = []
+    output = ""
 
     for item in directory_contents:
+        target_item = os.path.join(target_dir, item)
         try: 
-            file_size = os.path.getsize(item)
-            is_dir = os.path.isdir(item)
+            file_size = os.path.getsize(target_item)
+            is_dir = os.path.isdir(target_item)
             
-            output.append(f'- {item}: file_size={file_size} bytes, is_dir={is_dir}')
+            output += f'- {item}: file_size={file_size} bytes, is_dir={is_dir}\n'
         except:
-            f'Error: Cannot list "{item}" as it is outside the permitted working directory'
+            return f'Error: Cannot list "{item}" as it is outside the permitted working directory'
 
     return output
 
