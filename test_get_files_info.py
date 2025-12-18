@@ -9,18 +9,19 @@ def get_results(output, directory):
     else:
         print(output)
 
-output = get_files_info("calculator", '.')
-get_results(output, '.')
+def test():
+    output = get_files_info("calculator", '.')
+    get_results(output, '.')
 
-output = get_files_info("calculator", "pkg")
+    output = get_files_info("calculator", "pkg")
+    get_results(output, "pkg")
 
-get_results(output, "pkg")
+    output = get_files_info("calculator", "/bin")
+    get_results(output, "/bin")
 
-output = get_files_info("calculator", "/bin")
+    output = get_files_info("calculator", "../")
+    get_results(output, "../")
 
-get_results(output, "/bin")
-
-output = get_files_info("calculator", "../")
-
-get_results(output, "../")
+if __name__ == "__main__":
+    test()
 
