@@ -1,17 +1,27 @@
 import os
 
+MAX_CHARS = 10000
+
 def get_file_content(working_directory, file_path):
 
     working_dir_abs = os.path.abspath(working_directory)
 
-    target_dir = os.path.normpath(os.path.join(working_dir_abs, directory))
+    target_dir = os.path.normpath(os.path.join(working_dir_abs, file_path))
 
     valid_target_dir = os.path.commonpath([working_dir_abs, target_dir]) == working_dir_abs
 
     if valid_target_dir == False:
-        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
-
+        return f'Error: Cannot read "{file_path} as it is outside the permitted working directory'
     if os.path.isfile(target_dir) == False:
-        return f'Error: {target_dir} is not a directory'
+        return f'Error: File not found or is not a regular file: "{file_path}"'
+    
+    try:
+        with open(target_dir, "r") as f:
+            content = f.read(MAX_CHARS)
+            # After reading the first MAX_CHARS...
+            if f.read(1):
+                content += f'[...File "{file_path}" truncated at {MAX_CHARS} characters]'
+    except: 
+        return f"Error: Unable to read file"
 
 
