@@ -10,12 +10,12 @@ def run_python_file(working_directory, file_path, args=None):
         valid_target_path = os.path.commonpath([working_dir_abs, target_path]) == working_dir_abs
 
         if valid_target_path == False:
-            return f'Error: Cannot execute "{file_path}" as it is outsie the permitted working directory'
+            return f'Error: Cannot execute "{file_path}" as it is outside the permitted working directory'
 
-        if os.path.isfile(file_path) == False:
+        if os.path.isfile(target_path) == False:
             return f'Error: "{file_path}" does not exist or is not a regular file'
 
-        if file_path.endswith(".py") == False:
+        if target_path.endswith(".py") == False:
             return f'Error: "{file_path}" is not a Python file'
 
         command = ["python", target_path]
@@ -29,15 +29,18 @@ def run_python_file(working_directory, file_path, args=None):
             timeout=30,
         )
 
+        output = ""
+
         if result.returncode != 0:
-                return f'Error: Process exited with code {result.returncode}'
+            output += f'Error: Process exited with code {result.returncode}'
+        elif result.stdout == None or result.stderr == None:
+            output += f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}\nNo output produced\n"
+        else:
+            output += f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}\nNo output produced\n"
 
-        if result.stdout == None or result.stderr == None:
-            return f"No output produced"
-
-        return f'STDOUT: {result.stdout} \n STDERR: {result.stderr}\n'
+        return output
 
     except Exception as e:
-        return f"Error: executing Python file: {e}"
+        return f"Error: executing Python file: {e}\n"
 
 
