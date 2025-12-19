@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 def run_python_file(working_directory, file_path, args=None):
     try:
@@ -17,8 +18,9 @@ def run_python_file(working_directory, file_path, args=None):
         if file_path.endswith(".py") == False:
             return f'Error: "{file_path}" is not a Python file'
 
-        command = ["python", absolute_file_path]
-        command.extend(args)
+        command = ["python", target_path]
+        if args is not None:
+            command.extend(args)
 
         result = subprocess.run(
             command,
