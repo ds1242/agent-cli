@@ -43,7 +43,8 @@ def main():
     if response.function_calls is not None:
         for function_call in response.function_calls:
             print(f"Calling function: {function_call.name}({function_call.args})")
-    print(response.text)
+    else:
+        print(response.text)
     
 
 
