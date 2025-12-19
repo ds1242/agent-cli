@@ -30,5 +30,12 @@ def run_python_file(working_directory, file_path, args=None):
         if result.returncode != 0:
                 return f'Error: Process exited with code {result.returncode}'
 
+        if result.stdout == None or result.stderr == None:
+            return f"No output produced"
+
+        return f'STDOUT: {result.stdout} \n STDERR: {result.stderr}\n'
+
+    except Exception as e:
+        return f"Error: executing Python file: {e}"
 
 
