@@ -43,20 +43,19 @@ def main():
     if response.function_calls is not None:
         function_results = []
         for function_call in response.function_calls:
-            function_call_result = call_function(function_call, verbose=args.Verbose)
+            function_call_result = call_function(function_call, verbose=args.verbose)
 
-            if not function_call_result.parts:
-                raise RuntimeError("Function call has no parts")
+            if (
+                not function_call_result.parts
+                or not function_call_result.parts[0].function_response
+                or not function_call_result.parts[0].function_response.response
+            ):
+                raise RuntimeError(f"Empty function response for {function_call.name}")
 
-            if not function_call.parts[0].function_response:
-                raise RuntimeError("Function call has no response")
-
-            if not function_call.parts[0].function_response.response:
-                raise RuntimeError("Function response contains no response")
 
             function_results.append(function_call_result.parts[0])
 
-            if args.Verbose:
+            if args.verbose:
                 print(f"-> {function_call_result.parts[0].function_response.response}")
     else:
         print(response.text)
