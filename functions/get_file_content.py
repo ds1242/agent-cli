@@ -1,5 +1,22 @@
 import os
 from config import MAX_CHARS
+from google.genai import types
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Takes the required path and reads the content from a file (may be truncated to a max number of characters)",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path to the file for the content to be read (limited by a max character count)"
+            ),
+        },
+        required=["file_path"],
+    ),
+)
+
 
 def get_file_content(working_directory, file_path):
     
