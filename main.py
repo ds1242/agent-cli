@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from prompts import system_prompt
-from call_function import available_functions
+from call_function import available_functions, call_function
 
 
 
@@ -42,7 +42,9 @@ def main():
 
     if response.function_calls is not None:
         for function_call in response.function_calls:
-            print(f"Calling function: {function_call.name}({function_call.args})")
+            function_call_result = call_function(function_call, verbose=args.Verbose)
+            if not function_call_result.parts:
+                raise RuntimeError("Funciton call has no parts")
     else:
         print(response.text)
     
