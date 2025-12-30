@@ -41,10 +41,23 @@ def main():
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
 
     if response.function_calls is not None:
+        function_results = []
         for function_call in response.function_calls:
             function_call_result = call_function(function_call, verbose=args.Verbose)
+
             if not function_call_result.parts:
-                raise RuntimeError("Funciton call has no parts")
+                raise RuntimeError("Function call has no parts")
+
+            if not function_call.parts[0].function_response:
+                raise RuntimeError("Function call has no response")
+
+            if not function_call.parts[0].function_response.response:
+                raise RuntimeError("Function response contains no response")
+
+            function_results.append(function_call_result.parts[0])
+
+            if args.Verbose:
+                print(f"-> {function_call_result.parts[0].function_response.response}")
     else:
         print(response.text)
     
